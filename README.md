@@ -1,1 +1,1 @@
-# 졸업작품 Project - Backend
+# 졸업작품 Project - Backend 구현 Repository
