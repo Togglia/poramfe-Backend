@@ -33,12 +33,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = parseBearerToken(request);
             //토큰값이 널이거나 문자가 null일경우
             if (token != null && !token.equalsIgnoreCase("null")) {
-                //토큰 검증해서 payload의 userEmail가져옴
-                String userEmail = tokenProvider.validate(token);
+                //토큰 검증해서 payload의 userNickname가져옴
+                String userNickname = tokenProvider.validate(token);
 
                 //SecurityContext에 추가될 객체
                 AbstractAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userEmail, null,
+                    new UsernamePasswordAuthenticationToken(userNickname, null,
                         AuthorityUtils.NO_AUTHORITIES);
                 authentication.setDetails(
                     new WebAuthenticationDetailsSource().buildDetails(request));
