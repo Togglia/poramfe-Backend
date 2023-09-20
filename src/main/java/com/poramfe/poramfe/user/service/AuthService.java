@@ -70,7 +70,7 @@ public class AuthService {
         String userEmail = dto.getUserEmail();
         String userPassword = dto.getUserPassword();
 
-        UserEntity userEntity = null;
+        UserEntity userEntity;
         try {
             userEntity = userRepository.findByUserEmail(userEmail);
             //잘못된 이메일
@@ -83,7 +83,7 @@ public class AuthService {
         }
         userEntity.setUserPassword("");
 
-        String token = tokenProvider.create(userEntity.getUserNickname());
+        String token = tokenProvider.create(userEntity.getUserEmail());
         int exprTime = 3600000;
 
         SignInResponseDto signInResponseDto = new SignInResponseDto(token, exprTime, userEntity);
