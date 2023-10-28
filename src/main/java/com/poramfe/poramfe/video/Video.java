@@ -28,7 +28,5 @@ public class Video implements Serializable {
     public String getFileName() {
         return title;
     }
-
-    // 생성자, Getter 및 Setter
 }
 
