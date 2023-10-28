@@ -23,5 +23,24 @@ public class VideoController {
         return new ResponseEntity<>("Video uploaded successfully", HttpStatus.OK);
     }
 
+    @Autowired
+    private VideoRepository videoRepository;
 
+    @GetMapping("/{videoId}/stream")
+    public ResponseEntity<byte[]> streamVideo(@PathVariable Long videoId) {
+        Optional<Video> videoOptional = videoRepository.findById(videoId);
+        if (videoOptional.isPresent()) {
+            Video video = videoOptional.get();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", video.getFileName()); // 파일 이름 동적으로 설정
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(video.getVideoContent());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
