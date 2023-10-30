@@ -15,7 +15,6 @@ import jakarta.persistence.Table;
 @Data // @Getter @Setter
 @Table(name = "board")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {"id, title"})
 public class Board {
     @Id @GeneratedValue
     private Long id;

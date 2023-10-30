@@ -13,10 +13,15 @@ public class VideoService {
 
     public void uploadVideo(String title, MultipartFile videoFile) {
         try {
-            Video video = new Video();
-            video.setTitle(title); //파일이름
-            video.setVideoData(videoFile.getBytes());
-            videoRepository.save(video);
+            if (videoFile != null && !videoFile.isEmpty()) {
+                Video video = new Video();
+                video.setTitle(title);
+                byte[] file = videoFile.getBytes();
+                video.setFile(file); // videoData 대신 file로 설정
+                videoRepository.save(video);
+            } else {
+                throw new IllegalArgumentException("Video file is empty or null.");
+            }
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload video");
         }

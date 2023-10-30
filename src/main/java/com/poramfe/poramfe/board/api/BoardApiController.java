@@ -15,11 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+@CrossOrigin("*")
 @RestController
 @RequiredArgsConstructor
 public class BoardApiController {
-
     private final BoardService boardService; // Autowired로 스프링 빈에 등록
 
     @GetMapping("/api/board-list")
@@ -28,9 +27,9 @@ public class BoardApiController {
         List<BoardDto> boardDtoList = boardList.stream().map(b -> new BoardDto(b)).collect(Collectors.toList());
         return new WrapperClass(boardDtoList);
     }
-    @GetMapping("/api/board-detail/{boardId}")
-    public WrapperClass board_detail(@PathVariable("boardId") Long boardId){
-        Board board = boardService.findOne(boardId);
+    @GetMapping("/api/board-detail/{id}")
+    public WrapperClass board_detail(@PathVariable("id") Long id){
+        Board board = boardService.findOne(id);
         BoardDto boardDto = new BoardDto(board);
         return new WrapperClass(boardDto);
     }
