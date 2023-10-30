@@ -34,33 +34,33 @@ public class BoardService {
     }
 
     @Transactional
-    public String update(Long id, String title, String content, String writer, HttpServletRequest request) {
-
-        try {
-            String token = parseBearerToken(request);
-            if (token != null && !token.equalsIgnoreCase("null")) {
-                String userNickname = tokenProvider.validate(token);
-
-                if (userNickname == null) {
-                    return "잘못된 접근입니다.";
-                } else {
-                    Optional<Board> boardOptional = boardRepository.findById(id);
-                    if (boardOptional.isPresent()) {
-                        Board BoardToUpdate = boardOptional.get();
-
-                        if (!BoardToUpdate.getWriter().equals(userNickname)) {
-                            return "작성자와 로그인 사용자가 다릅니다.";
-                        }
-                        Board findBoard = boardRepository.findById(id).orElseThrow(NullPointerException::new); // 영속성 컨텍스트
-                        findBoard.setTitle(title); // Dirty Checking
-                        findBoard.setContent(content);
-                    }
-                }
-            }
-        }catch (Exception exception) {
-            exception.printStackTrace();
-        }
-        return "INFO) Memo update fail";
+    public void update(Long id, String title, String content, String writer, HttpServletRequest request) {
+        Board findBoard = boardRepository.findById(id).orElseThrow(NullPointerException::new); // 영속성 컨텍스트
+        findBoard.setTitle(title); // Dirty Checking
+        findBoard.setContent(content);
+//        try {
+//            String token = parseBearerToken(request);
+//            if (token != null && !token.equalsIgnoreCase("null")) {
+//                String userNickname = tokenProvider.validate(token);
+//
+//                if (userNickname == null) {
+//                    return "잘못된 접근입니다.";
+//                } else {
+//                    Optional<Board> boardOptional = boardRepository.findById(id);
+//                    if (boardOptional.isPresent()) {
+//                        Board BoardToUpdate = boardOptional.get();
+//
+//                        if (!BoardToUpdate.getWriter().equals(userNickname)) {
+//                            return "작성자와 로그인 사용자가 다릅니다.";
+//                        }
+//
+//                    }
+//                }
+//            }
+//        }catch (Exception exception) {
+//            exception.printStackTrace();
+//        }
+//        return "INFO) Memo update fail";
 
     }
     @Transactional
