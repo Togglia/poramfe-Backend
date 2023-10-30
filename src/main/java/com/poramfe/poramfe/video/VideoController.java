@@ -1,6 +1,7 @@
 package com.poramfe.poramfe.video;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.util.Optional;
-@CrossOrigin("*")
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/videos")
 public class VideoController {
@@ -28,18 +30,19 @@ public class VideoController {
     private VideoRepository videoRepository;
 
     @GetMapping("/{videoId}/stream")
-    public ResponseEntity<byte[]> streamVideo(@PathVariable Long videoId) {
+    public ResponseEntity<InputStreamResource> streamVideo(@PathVariable Long videoId) {
         Optional<Video> videoOptional = videoRepository.findById(videoId);
         if (videoOptional.isPresent()) {
             Video video = videoOptional.get();
 
+            InputStreamResource videoStream = new InputStreamResource(new ByteArrayInputStream(video.getFile()));
+
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", video.getFileName()); // 파일 이름 동적으로 설정
+            headers.setContentType(MediaType.valueOf("video/mp4")); // 영상의 MIME 타입을 설정
 
             return ResponseEntity.ok()
                     .headers(headers)
-                    .body(video.getVideoContent());
+                    .body(videoStream);
         } else {
             return ResponseEntity.notFound().build();
         }
